@@ -115,6 +115,11 @@ public class SpoolDirCsvSourceTask extends SpoolDirSourceTask<SpoolDirCsvSourceC
       Struct keyStruct = new Struct(this.config.keySchema);
       Struct valueStruct = new Struct(this.config.valueSchema);
 
+      if (row.length < this.fieldNames.length) {
+        log.warn("Skipping row because it doesn't match the schema");
+        continue;
+      }
+
       for (int i = 0; i < this.fieldNames.length; i++) {
         String fieldName = this.fieldNames[i];
         log.trace("process() - Processing field {}", fieldName);
