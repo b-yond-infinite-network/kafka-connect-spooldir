@@ -112,7 +112,7 @@ public class SpoolDirCsvSourceTask extends AbstractSpoolDirSourceTask<SpoolDirCs
       Struct keyStruct = new Struct(this.config.keySchema);
       Struct valueStruct = new Struct(this.config.valueSchema);
 
-      if (row.length < this.fieldNames.length) {
+      if (this.config.skipLineOnError && row.length < this.fieldNames.length) {
         log.warn("Skipping row because it doesn't match the schema");
         continue;
       }
