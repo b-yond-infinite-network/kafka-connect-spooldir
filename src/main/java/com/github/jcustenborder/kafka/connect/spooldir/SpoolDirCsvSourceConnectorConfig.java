@@ -51,6 +51,7 @@ class SpoolDirCsvSourceConnectorConfig extends SpoolDirSourceConnectorConfig {
   public static final String CSV_CHARSET_CONF = "csv.file.charset";
   public static final String CSV_CASE_SENSITIVE_FIELD_NAMES_CONF = "csv.case.sensitive.field.names";
   public static final String CSV_USE_RFC_4180_PARSER_CONF = "csv.rfc.4180.parser.enabled";
+  public static final String CSV_SKIP_LINE_ON_ERROR_CONF = "csv.skip.line.on.error.enabled";
   static final String CSV_SKIP_LINES_DISPLAY = "Skip lins";
   static final String CSV_SEPARATOR_CHAR_DISPLAY = "Separator Character";
   static final String CSV_QUOTE_CHAR_DISPLAY = "Quote Character";
@@ -66,7 +67,9 @@ class SpoolDirCsvSourceConnectorConfig extends SpoolDirSourceConnectorConfig {
   static final String CSV_CASE_SENSITIVE_FIELD_NAMES_DISPLAY = "Case sensitive field names.";
   static final String CSV_USE_RFC_4180_PARSER_DISPLAY = "Flag to determine if the RFC 4180 should be " +
       "used instead.";
+  static final String CSV_SKIP_LINE_ON_ERROR_DISPLAY = "Skip line on error.";
   static final Object CSV_USE_RFC_4180_PARSER_DEFAULT = false;
+  static final Object CSV_SKIP_LINE_ON_ERROR_DEFAULT = false;
 
 
   static final String CSV_SKIP_LINES_DOC = "Number of lines to skip in the beginning of the file.";
@@ -103,6 +106,7 @@ class SpoolDirCsvSourceConnectorConfig extends SpoolDirSourceConnectorConfig {
 
   static final String CSV_CASE_SENSITIVE_FIELD_NAMES_DOC = "Flag to determine if the field names in the header row should be treated as case sensitive.";
   static final String CSV_USE_RFC_4180_PARSER_DOC = "Flag to determine if the RFC 4180 parser should be used instead of the default parser.";
+  static final String CSV_SKIP_LINE_ON_ERROR_DOC = "Skip a line on unmatching column count error and continue parsing the file.";
   static final String CSV_GROUP = "CSV Parsing";
   private static final String CSV_QUOTE_CHAR_DOC = "The character that is used to quote a field. This typically happens when the " + CSV_SEPARATOR_CHAR_CONF + " character is within the data.";
   private static final Character NULL_CHAR = (char) 0;
@@ -120,6 +124,7 @@ class SpoolDirCsvSourceConnectorConfig extends SpoolDirSourceConnectorConfig {
   public final Charset charset;
   public final boolean caseSensitiveFieldNames;
   public final boolean useRFC4180Parser;
+  public final boolean skipLineOnError;
 
   public SpoolDirCsvSourceConnectorConfig(final boolean isTask, Map<String, ?> settings) {
     super(isTask, conf(), settings);
@@ -140,6 +145,7 @@ class SpoolDirCsvSourceConnectorConfig extends SpoolDirSourceConnectorConfig {
 
     this.caseSensitiveFieldNames = this.getBoolean(SpoolDirCsvSourceConnectorConfig.CSV_CASE_SENSITIVE_FIELD_NAMES_CONF);
     this.useRFC4180Parser = this.getBoolean(CSV_USE_RFC_4180_PARSER_CONF);
+    this.skipLineOnError = this.getBoolean(CSV_SKIP_LINE_ON_ERROR_CONF);
   }
 
   static final ConfigDef conf() {
@@ -282,6 +288,14 @@ class SpoolDirCsvSourceConnectorConfig extends SpoolDirSourceConnectorConfig {
                 .documentation(CSV_USE_RFC_4180_PARSER_DOC)
                 .displayName(CSV_USE_RFC_4180_PARSER_DISPLAY)
                 .build()
+        )
+        .define(
+            ConfigKeyBuilder.of(CSV_SKIP_LINE_ON_ERROR_CONF, ConfigDef.Type.BOOLEAN)
+                    .defaultValue(CSV_SKIP_LINE_ON_ERROR_DEFAULT)
+                    .importance(ConfigDef.Importance.LOW)
+                    .documentation(CSV_SKIP_LINE_ON_ERROR_DOC)
+                    .displayName(CSV_SKIP_LINE_ON_ERROR_DISPLAY)
+                    .build()
         );
   }
 
